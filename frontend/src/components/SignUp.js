@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
-function SignUp() {
+function SignUp({ setUser }) {
   const [formData, setFormData] = useState({
     username: "",
     image: "",
     bio: "",
     password: "",
   });
+  const [errors, setErrors] = useState([]);
+  const history = useHistory();
 
   function handleChange(e) {
     setFormData({
@@ -17,7 +20,29 @@ function SignUp() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // TODO: sign up as a new user
+    fetch("http://localhost:3000/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((r) => {
+        return r.json().then((data) => {
+          if (r.ok) {
+            return data;
+          } else {
+            throw data;
+          }
+        });
+      })
+      .then((user) => {
+        setUser(user);
+        history.push("/profile");
+      })
+      .catch((error) => {
+        setErrors(error.errors);
+      });
   }
 
   const { username, image, bio, password } = formData;
@@ -64,6 +89,11 @@ function SignUp() {
         onChange={handleChange}
       />
 
+      {errors.map((error) => (
+        <p style={{ color: "red" }} key={error}>
+          {error}
+        </p>
+      ))}
       <input type="submit" value="Signup" />
     </form>
   );
