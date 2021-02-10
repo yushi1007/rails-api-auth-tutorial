@@ -18,7 +18,15 @@ function App() {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((r) => r.json())
+      .then((r) => {
+        return r.json().then((data) => {
+          if (r.ok) {
+            return data;
+          } else {
+            throw data;
+          }
+        });
+      })
       .then((user) => {
         // response => set user in state
         setUser(user);
@@ -27,7 +35,7 @@ function App() {
 
   return (
     <>
-      <NavBar user={user} />
+      <NavBar user={user} setUser={setUser} />
       <main>
         <Switch>
           <Route path="/signup">

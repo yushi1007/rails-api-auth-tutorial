@@ -1,7 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function NavBar({ user }) {
+function NavBar({ user, setUser }) {
+  function logout() {
+    // remove the token from localstorage
+    localStorage.removeItem("token");
+    // clear the user from state
+    setUser(null);
+  }
+
   return (
     <header>
       <div>
@@ -11,7 +18,7 @@ function NavBar({ user }) {
         {user ? (
           <>
             <Link to="/profile">Profile</Link>
-            <button>Logout</button>
+            <button onClick={logout}>Logout</button>
           </>
         ) : (
           <>
