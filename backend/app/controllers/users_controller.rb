@@ -11,6 +11,16 @@ class UsersController < ApplicationController
     end
   end
 
+  # POST /signup
+  def signup
+    user = User.create(user_params)
+    if user.valid?
+      render json: user, status: :created
+    else
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   # GET /me
   def me
     render json: @current_user
@@ -20,6 +30,12 @@ class UsersController < ApplicationController
   def update
     @current_user.update(bio: params[:bio], image: params[:image])
     render json: @current_user
+  end
+
+  private
+
+  def user_params
+    params.permit(:username, :password, :image, :bio)
   end
 
 end
