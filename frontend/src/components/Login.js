@@ -31,7 +31,9 @@ function Login({ setUser }) {
           }
         });
       })
-      .then((user) => {
+      .then((data) => {
+        const { user, token } = data;
+        localStorage.setItem("token", token);
         setUser(user);
         history.push("/profile");
       })
