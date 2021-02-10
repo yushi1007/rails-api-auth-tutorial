@@ -3,9 +3,12 @@ class UsersController < ApplicationController
 
   # POST /login
   def login
-    # TODO: look up a user with username and password
-    user = User.first
-    render json: user
+    user = User.find_by(username: params[:username])
+    if user && user.authenticate(params[:password])
+      render json: user
+    else
+      render json: { errors: ["Invalid username or password"] }, status: :unauthorized
+    end
   end
 
   # GET /me
