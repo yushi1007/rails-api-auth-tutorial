@@ -12,12 +12,12 @@ function App() {
 
   useEffect(() => {
     // GET /me
-    fetch("http://localhost:3000/me")
-      .then((r) => r.json())
-      .then((user) => {
-        // response => set user in state
-        setUser(user);
-      });
+    // fetch("http://localhost:3000/me")
+    //   .then((r) => r.json())
+    //   .then((user) => {
+    //     // response => set user in state
+    //     setUser(user);
+    //   });
   }, []);
 
   return (
