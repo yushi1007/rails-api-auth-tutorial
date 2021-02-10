@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
 import SignUp from "./SignUp";
 import Login from "./Login";
@@ -9,6 +9,16 @@ function App() {
   const [user, setUser] = useState(null);
 
   console.log(user);
+
+  useEffect(() => {
+    // GET /me
+    fetch("http://localhost:3000/me")
+      .then((r) => r.json())
+      .then((user) => {
+        // response => set user in state
+        setUser(user);
+      });
+  }, []);
 
   return (
     <>
@@ -22,7 +32,11 @@ function App() {
             <Login setUser={setUser} />
           </Route>
           <Route path="/profile">
-            <Profile />
+            {user ? (
+              <Profile user={user} setUser={setUser} />
+            ) : (
+              <h1>You must log in to see this page!</h1>
+            )}
           </Route>
           <Route path="/">
             <h1>Please Login or Sign Up</h1>
