@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Login() {
+function Login({ setUser }) {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -13,6 +13,15 @@ function Login() {
   function handleSubmit(e) {
     e.preventDefault();
     // TODO: login the user
+    // POST /login
+    fetch("http://localhost:3000/login", {
+      method: "POST",
+    })
+      .then((r) => r.json())
+      .then((user) => {
+        // response -> user saved in state
+        setUser(user);
+      });
   }
 
   return (
