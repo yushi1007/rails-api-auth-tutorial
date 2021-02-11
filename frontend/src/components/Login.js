@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import client from "../client";
 
 function Login({ setUser }) {
   const [formData, setFormData] = useState({
@@ -15,22 +16,8 @@ function Login({ setUser }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    fetch("http://localhost:3000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((r) => {
-        return r.json().then((data) => {
-          if (r.ok) {
-            return data;
-          } else {
-            throw data;
-          }
-        });
-      })
+    client
+      .post("/login", formData)
       .then((data) => {
         const { user, token } = data;
         localStorage.setItem("token", token);

@@ -4,6 +4,7 @@ import SignUp from "./SignUp";
 import Login from "./Login";
 import NavBar from "./NavBar";
 import Profile from "./Profile";
+import client from "../client";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -12,25 +13,10 @@ function App() {
 
   useEffect(() => {
     // GET /me
-    const token = localStorage.getItem("token");
-    fetch("http://localhost:3000/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((r) => {
-        return r.json().then((data) => {
-          if (r.ok) {
-            return data;
-          } else {
-            throw data;
-          }
-        });
-      })
-      .then((user) => {
-        // response => set user in state
-        setUser(user);
-      });
+    client.get("/me").then((user) => {
+      // response => set user in state
+      setUser(user);
+    });
   }, []);
 
   return (
