@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
+import axios from "axios";
 import SignUp from "./SignUp";
 import Login from "./Login";
 import NavBar from "./NavBar";
@@ -12,25 +13,10 @@ function App() {
 
   useEffect(() => {
     // GET /me
-    const token = localStorage.getItem("token");
-    fetch("http://localhost:3000/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((r) => {
-        return r.json().then((data) => {
-          if (r.ok) {
-            return data;
-          } else {
-            throw data;
-          }
-        });
-      })
-      .then((user) => {
-        // response => set user in state
-        setUser(user);
-      });
+    axios.get("/me").then((response) => {
+      // response => set user in state
+      setUser(response.data);
+    });
   }, []);
 
   return (

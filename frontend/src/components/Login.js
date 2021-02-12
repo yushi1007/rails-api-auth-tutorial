@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -15,30 +16,17 @@ function Login({ setUser }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    fetch("http://localhost:3000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((r) => {
-        return r.json().then((data) => {
-          if (r.ok) {
-            return data;
-          } else {
-            throw data;
-          }
-        });
-      })
-      .then((data) => {
-        const { user, token } = data;
+    axios
+      .post("/login", formData)
+      .then((response) => {
+        const { user, token } = response.data;
         localStorage.setItem("token", token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         setUser(user);
         history.push("/profile");
       })
       .catch((error) => {
-        setErrors(error.errors);
+        setErrors(error.response.data.errors);
       });
   }
 

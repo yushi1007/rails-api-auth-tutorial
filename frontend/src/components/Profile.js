@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 function Profile({ user, setUser }) {
@@ -17,19 +18,9 @@ function Profile({ user, setUser }) {
     e.preventDefault();
     // TODO: update the user's profile
     // PATCH /me
-    const token = localStorage.getItem("token");
-    fetch("http://localhost:3000/me", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((r) => r.json())
-      .then((user) => {
-        setUser(user);
-      });
+    axios.patch("/me", formData).then((response) => {
+      setUser(response.data);
+    });
     // send form data
     // update the user object in state
   }
