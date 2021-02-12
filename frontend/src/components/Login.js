@@ -1,6 +1,6 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import client from "../client";
 
 function Login({ setUser }) {
   const [formData, setFormData] = useState({
@@ -16,16 +16,17 @@ function Login({ setUser }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    client
+    axios
       .post("/login", formData)
-      .then((data) => {
-        const { user, token } = data;
+      .then((response) => {
+        const { user, token } = response.data;
         localStorage.setItem("token", token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         setUser(user);
         history.push("/profile");
       })
       .catch((error) => {
-        setErrors(error.errors);
+        setErrors(error.response.data.errors);
       });
   }
 

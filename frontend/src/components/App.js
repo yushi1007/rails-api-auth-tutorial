@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
+import axios from "axios";
 import SignUp from "./SignUp";
 import Login from "./Login";
 import NavBar from "./NavBar";
 import Profile from "./Profile";
-import client from "../client";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -13,9 +13,9 @@ function App() {
 
   useEffect(() => {
     // GET /me
-    client.get("/me").then((user) => {
+    axios.get("/me").then((response) => {
       // response => set user in state
-      setUser(user);
+      setUser(response.data);
     });
   }, []);
 
