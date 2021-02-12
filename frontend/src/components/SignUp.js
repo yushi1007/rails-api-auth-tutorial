@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import client from "../client";
+import axios from "axios";
 
 function SignUp({ setUser }) {
   const [formData, setFormData] = useState({
@@ -21,16 +21,17 @@ function SignUp({ setUser }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    client
+    axios
       .post("/signup", formData)
-      .then((data) => {
-        const { user, token } = data;
+      .then((response) => {
+        const { user, token } = response.data;
         localStorage.setItem("token", token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         setUser(user);
         history.push("/profile");
       })
       .catch((error) => {
-        setErrors(error.errors);
+        setErrors(error.response.data.errors);
       });
   }
 

@@ -1,5 +1,5 @@
+import axios from "axios";
 import React, { useState } from "react";
-import client from "../client";
 
 function Profile({ user, setUser }) {
   const [formData, setFormData] = useState({
@@ -18,8 +18,8 @@ function Profile({ user, setUser }) {
     e.preventDefault();
     // TODO: update the user's profile
     // PATCH /me
-    client.patch("/me", formData).then((user) => {
-      setUser(user);
+    axios.patch("/me", formData).then((response) => {
+      setUser(response.data);
     });
     // send form data
     // update the user object in state
