@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import GoogleLogin from "react-google-login";
 
 function Login({ setUser }) {
   const [formData, setFormData] = useState({
@@ -9,6 +10,27 @@ function Login({ setUser }) {
   });
   const [errors, setErrors] = useState([]);
   const history = useHistory();
+
+  function responseGoogle(response) {
+    if (response.tokenId) {
+      axios
+        .post("/login/google", null, {
+          headers: {
+            Authorization: `Bearer ${response.tokenId}`,
+          },
+        })
+        .then((response) => {
+          const { user, token } = response.data;
+          localStorage.setItem("token", token);
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+          setUser(user);
+          history.push("/profile");
+        })
+        .catch((error) => {
+          setErrors(error.response.data.errors);
+        });
+    }
+  }
 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -57,6 +79,14 @@ function Login({ setUser }) {
         ))}
         <input type="submit" value="Login" />
       </form>
+      <hr />
+      <GoogleLogin
+        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+        buttonText="Login"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={"single_host_origin"}
+      />
     </div>
   );
 }

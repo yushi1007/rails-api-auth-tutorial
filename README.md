@@ -217,4 +217,10 @@ Since this authentication flow has a few steps that could cause errors, and
 we'll be using this code frequently for other actions, we'll also work on
 refactoring this code for easier use down the road.
 
+## Google Sign-In
+
+- [Google Sign-In Docs](https://developers.google.com/identity/sign-in/web/sign-in)
+- [react-google-login package](https://www.npmjs.com/package/react-google-login)
+- [google-id-token gem](https://github.com/google/google-id-token)
+
 [bcrypt]: https://github.com/codahale/bcrypt-ruby
